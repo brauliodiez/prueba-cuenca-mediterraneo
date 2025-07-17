@@ -1,19 +1,19 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import { EmbalsesAndalucia, Province } from "./cuenca.model";
+import { EmbalsesAndalucia } from "./cuenca.model";
 import { parseReservoirRow } from "./helpers";
 
 const URL = "https://www.redhidrosurmedioambiente.es/saih/resumen/embalses";
 
 
 /**
- * Scrapea los datos de embalses de Andalucía y los organiza por provincia.
+ * Scrapea los datos de embalses de Andalucía y los devuelve como un array.
  */
-export async function scrapeAndalucia(): Promise<Province> {
+export async function scrapeAndalucia(): Promise<EmbalsesAndalucia[]> {
   const { data: html } = await axios.get(URL);
   const $ = cheerio.load(html);
 
-  const provinces: Province = {};
+  const embalses: EmbalsesAndalucia[] = [];
   let currentProvince = "";
 
   $("table tbody tr").each((_, row) => {
@@ -30,15 +30,12 @@ export async function scrapeAndalucia(): Promise<Province> {
       .map((_, el) => $(el).text().trim())
       .get();
 
-    const reservoir = parseReservoirRow(cols);
+    const reservoir = parseReservoirRow(cols, currentProvince);
 
     if (reservoir) {
-      if (!provinces[currentProvince]) {
-        provinces[currentProvince] = [];
-      }
-      provinces[currentProvince].push(reservoir);
+      embalses.push(reservoir);
     }
   });
 
-  return provinces;
+  return embalses;
 }

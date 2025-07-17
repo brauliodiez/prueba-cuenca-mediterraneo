@@ -3,7 +3,7 @@ import { EmbalsesAndalucia } from "./cuenca.model";
 /**
  * Parsea una fila HTML de la tabla de embalses y devuelve un objeto con los datos.
  */
-export function parseReservoirRow(cols: string[]): EmbalsesAndalucia | null {
+export function parseReservoirRow(cols: string[], provincia: string): EmbalsesAndalucia | null {
   if (cols.length < 10) return null;
 
   const [
@@ -23,6 +23,7 @@ export function parseReservoirRow(cols: string[]): EmbalsesAndalucia | null {
   return {
     id: parseInt(id, 10),
     embalse,
+    provincia,
     porcentajeActual: parseFloat(porcentajeActual),
     capacidadTotalHm3: parseFloat(capacidadTotalHm3),
     acumuladoHoyMm: parseFloat(acumuladoHoyMm),

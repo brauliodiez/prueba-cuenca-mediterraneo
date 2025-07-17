@@ -1,6 +1,7 @@
 export interface EmbalsesAndalucia {
   id: number;
   embalse: string;
+  provincia: string;
   porcentajeActual: number;
   capacidadTotalHm3: number;
   acumuladoHoyMm: number;
@@ -10,8 +11,4 @@ export interface EmbalsesAndalucia {
   acumuladoAnioAnteriorMm: number;
   volumenAnioAnteriorHm3: number;
   grafico: any;
-}
-
-export interface Province {
-  [name: string]: EmbalsesAndalucia[];
 }
