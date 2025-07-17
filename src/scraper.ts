@@ -5,7 +5,6 @@ import { parseReservoirRow } from "./helpers";
 
 const URL = "https://www.redhidrosurmedioambiente.es/saih/resumen/embalses";
 
-
 /**
  * Scrapea los datos de embalses de Andalucía y los devuelve como un array.
  */
