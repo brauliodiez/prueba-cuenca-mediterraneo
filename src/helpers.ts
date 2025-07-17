@@ -1,6 +1,19 @@
 import { EmbalsesAndalucia } from "./cuenca.model";
 
 /**
+ * Extrae el contenido de texto de todas las celdas (td) de una fila de tabla.
+ * @param $row - Elemento cheerio que representa una fila de tabla
+ * @param $ - Instancia de cheerio para procesar elementos
+ * @returns Array de strings con el contenido de texto de cada celda
+ */
+export function extractTableCellsText($row: any, $: any): string[] {
+  return $row
+    .find("td")
+    .map((_: any, el: any) => $(el).text().trim())
+    .get();
+}
+
+/**
  * Parsea una fila HTML de la tabla de embalses y devuelve un objeto con los datos.
  */
 export function parseReservoirRow(

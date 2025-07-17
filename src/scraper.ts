@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import { EmbalsesAndalucia } from "./cuenca.model";
-import { parseReservoirRow } from "./helpers";
+import { parseReservoirRow, extractTableCellsText } from "./helpers";
 
 const URL = "https://www.redhidrosurmedioambiente.es/saih/resumen/embalses";
 
@@ -24,10 +24,7 @@ export async function scrapeAndalucia(): Promise<EmbalsesAndalucia[]> {
       currentProvince = detectedProvince;
     }
 
-    const cols = $row
-      .find("td")
-      .map((_, el) => $(el).text().trim())
-      .get();
+    const cols = extractTableCellsText($row, $);
 
     const reservoir = parseReservoirRow(cols, currentProvince);
 
