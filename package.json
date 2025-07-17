@@ -1,0 +1,30 @@
+{
+  "name": "prueba-cuenca-mediterraneo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsx src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brauliodiez/prueba-cuenca-mediterraneo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brauliodiez/prueba-cuenca-mediterraneo/issues"
+  },
+  "homepage": "https://github.com/brauliodiez/prueba-cuenca-mediterraneo#readme",
+  "devDependencies": {
+    "@types/cheerio": "^0.22.35",
+    "@types/node": "^24.0.14",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "axios": "^1.10.0",
+    "cheerio": "^1.1.0"
+  }
+}
