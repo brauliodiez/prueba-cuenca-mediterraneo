@@ -1,66 +1,44 @@
-import axios from 'axios';
-import * as cheerio from 'cheerio';
-import * as fs from 'fs';
-import * as path from 'path';
-import { EmbalsesAndalucia, Province } from './interfaceAndalucia';
+import axios from "axios";
+import * as cheerio from "cheerio";
+import { EmbalsesAndalucia, Province } from "./cuenca.model";
+import { parseReservoirRow } from "./helpers";
 
-const url = 'https://www.redhidrosurmedioambiente.es/saih/resumen/embalses';
+const URL = "https://www.redhidrosurmedioambiente.es/saih/resumen/embalses";
 
+
+/**
+ * Scrapea los datos de embalses de Andalucía y los organiza por provincia.
+ */
 export async function scrapeAndalucia(): Promise<Province> {
-  const response = await axios.get(url);
-  const $ = cheerio.load(response.data);
+  const { data: html } = await axios.get(URL);
+  const $ = cheerio.load(html);
 
-  const reservoirs: Province = {};
-  let currentProvince = '';
+  const provinces: Province = {};
+  let currentProvince = "";
 
-  $('table tbody tr').each((_, row) => {
+  $("table tbody tr").each((_, row) => {
     const $row = $(row);
-    const provinceCell = $row.find('th[colspan="2"]');
-    const province = provinceCell.text().trim();
+    const provinceHeader = $row.find('th[colspan="2"]');
+    const detectedProvince = provinceHeader.text().trim();
 
-    if (province) {
-      currentProvince = province;
+    if (detectedProvince) {
+      currentProvince = detectedProvince;
     }
 
     const cols = $row
-      .find('td')
+      .find("td")
       .map((_, el) => $(el).text().trim())
       .get();
 
-    if (cols.length >= 10) {
-      const [
-        id,
-        embalse,
-        porcentajeActual,
-        capacidadTotalHm3,
-        acumuladoHoyMm,
-        volumenActualHm3,
-        acumuladoSemanaAnteriorMm,
-        volumenSemanaAnteriorHm3,
-        acumuladoAnioAnteriorMm,
-        volumenAnioAnteriorHm3,
-        grafico,
-      ] = cols;
+    const reservoir = parseReservoirRow(cols);
 
-      const reservoir: EmbalsesAndalucia = {
-        id: parseInt(id, 10),
-        embalse,
-        porcentajeActual: parseFloat(porcentajeActual),
-        capacidadTotalHm3: parseFloat(capacidadTotalHm3),
-        acumuladoHoyMm: parseFloat(acumuladoHoyMm),
-        volumenActualHm3: parseFloat(volumenActualHm3),
-        acumuladoSemanaAnteriorMm: parseFloat(acumuladoSemanaAnteriorMm),
-        volumenSemanaAnteriorHm3: parseFloat(volumenSemanaAnteriorHm3),
-        acumuladoAnioAnteriorMm: parseFloat(acumuladoAnioAnteriorMm),
-        volumenAnioAnteriorHm3: parseFloat(volumenAnioAnteriorHm3),
-        grafico,
-      };
-
-      if (!reservoirs[currentProvince]) reservoirs[currentProvince] = [];
-      reservoirs[currentProvince].push(reservoir);
+    if (reservoir) {
+      if (!provinces[currentProvince]) {
+        provinces[currentProvince] = [];
+      }
+      provinces[currentProvince].push(reservoir);
     }
   });
 
-  return reservoirs;
+  return provinces;
 }
-
