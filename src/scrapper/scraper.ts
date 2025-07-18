@@ -1,11 +1,13 @@
 import * as cheerio from "cheerio";
 import { EmbalsesAndalucia, getCuencaPageHTMLContent } from "../api";
+import { EmbalseUpdateSAIH } from "../db-model/db.model";
 import { extractProvinceTables, reservoirInfoFromTable } from "./business";
+import { mapToEmbalseUpdateSAIH } from "./mapper";
 
 /**
  * Scrapes Andalusian reservoir data and returns it as an array.
  */
-export async function scrapeAndalucia(): Promise<EmbalsesAndalucia[]> {
+export async function scrapeCuencaMediterranea(): Promise<EmbalseUpdateSAIH[]> {
   const html = await getCuencaPageHTMLContent();
   const $ = cheerio.load(html);
 
@@ -17,5 +19,6 @@ export async function scrapeAndalucia(): Promise<EmbalsesAndalucia[]> {
     return reservoirInfoFromTable(table.rows, table.province, $);
   });
 
-  return allReservoirs;
+  // Map to EmbalseUpdateSAIH format
+  return mapToEmbalseUpdateSAIH(allReservoirs);
 }
