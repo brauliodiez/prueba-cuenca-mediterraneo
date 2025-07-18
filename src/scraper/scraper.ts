@@ -3,16 +3,16 @@ import { EmbalsesAndalucia, getCuencaPageHTMLContent } from "../api";
 import { extractProvinceTables, reservoirInfoFromTable } from "./business";
 
 /**
- * Scrapea los datos de embalses de Andalucía y los devuelve como un array.
+ * Scrapes Andalusian reservoir data and returns it as an array.
  */
 export async function scrapeAndalucia(): Promise<EmbalsesAndalucia[]> {
   const html = await getCuencaPageHTMLContent();
   const $ = cheerio.load(html);
 
-  // Extraer las tablas organizadas por provincia
+  // Extract tables organized by province
   const provinceTables = extractProvinceTables($);
 
-  // Procesar cada tabla de provincia y aplanar los resultados
+  // Process each province table and flatten the results
   const allReservoirs = provinceTables.flatMap((table) => {
     return reservoirInfoFromTable(table.rows, table.province, $);
   });

@@ -2,12 +2,12 @@ import * as fs from "fs";
 import path from "path";
 
 export const clearAndCreateDirectory = (dirPath: string): void => {
-  // Limpiar carpeta si existe
+  // Clear folder if it exists
   if (fs.existsSync(dirPath)) {
     fs.rmSync(dirPath, { recursive: true, force: true });
   }
 
-  // Crear la carpeta
+  // Create the folder
   fs.mkdirSync(dirPath, { recursive: true });
 };
 
