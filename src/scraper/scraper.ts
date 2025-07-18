@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import { EmbalsesAndalucia, getCuencaPageHTMLContent } from "../api";
-import { extractProvinceTables, reservoirInfoFromTable } from "./helpers";
+import { extractProvinceTables, reservoirInfoFromTable } from "./business";
 
 /**
  * Scrapea los datos de embalses de Andalucía y los devuelve como un array.

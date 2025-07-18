@@ -1,10 +1,10 @@
-import { EmbalsesAndalucia } from "./api";
+import { EmbalsesAndalucia } from "../api";
 
 /**
- * Extrae el contenido de texto de todas las celdas (td) de una fila de tabla.
- * @param $row - Elemento cheerio que representa una fila de tabla
- * @param $ - Instancia de cheerio para procesar elementos
- * @returns Array de strings con el contenido de texto de cada celda
+ * Extracts the text content from all cells (td) of a table row.
+ * @param $row - Cheerio element representing a table row
+ * @param $ - Cheerio instance to process elements
+ * @returns Array of strings with the text content of each cell
  */
 export function extractTableCellsText($row: any, $: any): string[] {
   return $row
@@ -14,15 +14,15 @@ export function extractTableCellsText($row: any, $: any): string[] {
 }
 
 /**
- * Extrae el nombre de la provincia de una fila de encabezado.
- * @param $row - Elemento cheerio que representa una fila de tabla
- * @returns El nombre de la provincia o null si no es una fila de encabezado
+ * Extracts the province name from a header row.
+ * @param $row - Cheerio element representing a table row
+ * @returns The province name or null if it's not a header row
  */
 export function extractProvinceFromRow($row: any): string | null {
   const provinceHeader = $row.find('th[colspan="2"]');
   const detectedProvince = provinceHeader.text().trim();
 
-  // Verificar que sea realmente una provincia (no fechas ni otros encabezados)
+  // Verify that it's actually a province (not dates or other headers)
   if (
     detectedProvince &&
     !detectedProvince.includes("Fecha Actual") &&
@@ -38,19 +38,19 @@ export function extractProvinceFromRow($row: any): string | null {
 }
 
 /**
- * Verifica si una fila es una fila de datos de embalse (tiene celdas td).
- * @param $row - Elemento cheerio que representa una fila de tabla
- * @returns true si es una fila de datos de embalse
+ * Verifies if a row is a reservoir data row (has td cells).
+ * @param $row - Cheerio element representing a table row
+ * @returns true if it's a reservoir data row
  */
 export function isReservoirDataRow($row: any): boolean {
   const cells = $row.find("td");
-  return cells.length >= 10; // Una fila de embalse tiene al menos 10 columnas
+  return cells.length >= 10; // A reservoir row has at least 10 columns
 }
 
 /**
- * Extrae las secciones de provincia de la tabla principal.
- * @param $ - Instancia de cheerio
- * @returns Array de objetos con provincia y sus filas de datos
+ * Extracts the province sections from the main table.
+ * @param $ - Cheerio instance
+ * @returns Array of objects with province and its data rows
  */
 export function extractProvinceTables(
   $: any
@@ -62,10 +62,10 @@ export function extractProvinceTables(
   $("table tbody tr").each((_: any, row: any) => {
     const $row = $(row);
 
-    // Intentar extraer provincia de la fila
+    // Try to extract province from the row
     const provincia = extractProvinceFromRow($row);
     if (provincia) {
-      // Si ya teníamos una provincia anterior, guardar sus datos
+      // If we already had a previous province, save its data
       if (currentProvince && currentRows.length > 0) {
         provinceTables.push({
           province: currentProvince,
@@ -73,19 +73,19 @@ export function extractProvinceTables(
         });
       }
 
-      // Iniciar nueva provincia
+      // Start new province
       currentProvince = provincia;
       currentRows = [];
       return;
     }
 
-    // Si es una fila de datos de embalse, agregarla a la provincia actual
+    // If it's a reservoir data row, add it to the current province
     if (isReservoirDataRow($row) && currentProvince) {
       currentRows.push($row);
     }
   });
 
-  // No olvidar la última provincia
+  // Don't forget the last province
   if (currentProvince && currentRows.length > 0) {
     provinceTables.push({
       province: currentProvince,
@@ -97,11 +97,11 @@ export function extractProvinceTables(
 }
 
 /**
- * Procesa todas las filas de embalses de una provincia específica.
- * @param rows - Array de filas de cheerio
- * @param province - Nombre de la provincia
- * @param $ - Instancia de cheerio
- * @returns Array de embalses procesados
+ * Processes all reservoir rows from a specific province.
+ * @param rows - Array of cheerio rows
+ * @param province - Province name
+ * @param $ - Cheerio instance
+ * @returns Array of processed reservoirs
  */
 export function reservoirInfoFromTable(
   rows: any[],
@@ -121,11 +121,11 @@ export function reservoirInfoFromTable(
 }
 
 /**
- * Procesa una fila de datos de embalse y devuelve el objeto EmbalsesAndalucia.
- * @param $row - Elemento cheerio que representa una fila de tabla
- * @param $ - Instancia de cheerio para procesar elementos
- * @param provincia - Nombre de la provincia actual
- * @returns El embalse parseado o null si no se pudo procesar
+ * Processes a reservoir data row and returns the EmbalsesAndalucia object.
+ * @param $row - Cheerio element representing a table row
+ * @param $ - Cheerio instance to process elements
+ * @param provincia - Current province name
+ * @returns The parsed reservoir or null if it couldn't be processed
  */
 export function processReservoirRow(
   $row: any,
@@ -137,7 +137,7 @@ export function processReservoirRow(
 }
 
 /**
- * Parsea una fila HTML de la tabla de embalses y devuelve un objeto con los datos.
+ * Parses an HTML row from the reservoir table and returns an object with the data.
  */
 export function parseReservoirRow(
   cols: string[],
