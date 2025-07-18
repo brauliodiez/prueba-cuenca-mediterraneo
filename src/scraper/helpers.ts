@@ -1,4 +1,4 @@
-import { EmbalsesAndalucia } from "./api";
+import { EmbalsesAndalucia } from "../api";
 
 /**
  * Extrae el contenido de texto de todas las celdas (td) de una fila de tabla.

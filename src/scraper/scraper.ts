@@ -1,5 +1,5 @@
 import * as cheerio from "cheerio";
-import { EmbalsesAndalucia, getCuencaPageHTMLContent } from "./api";
+import { EmbalsesAndalucia, getCuencaPageHTMLContent } from "../api";
 import { extractProvinceTables, reservoirInfoFromTable } from "./helpers";
 
 /**
