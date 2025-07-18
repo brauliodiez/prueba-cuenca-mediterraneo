@@ -1,6 +1,21 @@
 import { EmbalsesAndalucia } from "../api";
 
 /**
+ * Parses a number string with European format (comma as decimal separator).
+ * @param value - The string value to parse
+ * @returns The parsed number or NaN if invalid
+ */
+export function parseEuropeanNumber(value: string): number {
+  if (!value || value.trim() === "" || value === "*" || value === "n/d") {
+    return NaN;
+  }
+
+  // Replace comma with dot for decimal separator
+  const normalizedValue = value.replace(",", ".");
+  return parseFloat(normalizedValue);
+}
+
+/**
  * Extracts the text content from all cells (td) of a table row.
  * @param $row - Cheerio element representing a table row
  * @param $ - Cheerio instance to process elements
@@ -163,14 +178,14 @@ export function parseReservoirRow(
     id: parseInt(id, 10),
     embalse,
     provincia,
-    porcentajeActual: parseFloat(porcentajeActual),
-    capacidadTotalHm3: parseFloat(capacidadTotalHm3),
-    acumuladoHoyMm: parseFloat(acumuladoHoyMm),
-    volumenActualHm3: parseFloat(volumenActualHm3),
-    acumuladoSemanaAnteriorMm: parseFloat(acumuladoSemanaAnteriorMm),
-    volumenSemanaAnteriorHm3: parseFloat(volumenSemanaAnteriorHm3),
-    acumuladoAnioAnteriorMm: parseFloat(acumuladoAnioAnteriorMm),
-    volumenAnioAnteriorHm3: parseFloat(volumenAnioAnteriorHm3),
+    porcentajeActual: parseEuropeanNumber(porcentajeActual),
+    capacidadTotalHm3: parseEuropeanNumber(capacidadTotalHm3),
+    acumuladoHoyMm: parseEuropeanNumber(acumuladoHoyMm),
+    volumenActualHm3: parseEuropeanNumber(volumenActualHm3),
+    acumuladoSemanaAnteriorMm: parseEuropeanNumber(acumuladoSemanaAnteriorMm),
+    volumenSemanaAnteriorHm3: parseEuropeanNumber(volumenSemanaAnteriorHm3),
+    acumuladoAnioAnteriorMm: parseEuropeanNumber(acumuladoAnioAnteriorMm),
+    volumenAnioAnteriorHm3: parseEuropeanNumber(volumenAnioAnteriorHm3),
     grafico,
   };
 }
