@@ -6,9 +6,12 @@ import { mapToEmbalseUpdateSAIH } from "./mapper";
 
 /**
  * Scrapes Andalusian reservoir data and returns it as an array.
+ * @param url - The URL to scrape the data from
  */
-export async function scrapeCuencaMediterranea(): Promise<EmbalseUpdateSAIH[]> {
-  const html = await getCuencaPageHTMLContent();
+export async function scrapeCuencaMediterranea(
+  url: string
+): Promise<EmbalseUpdateSAIH[]> {
+  const html = await getCuencaPageHTMLContent(url);
   const $ = cheerio.load(html);
 
   // Extract tables organized by province
