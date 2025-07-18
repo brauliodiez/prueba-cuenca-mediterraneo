@@ -1,6 +1,6 @@
 import path from "path";
 import { fileURLToPath } from "url";
-import { scrapeAndalucia } from "./scraper";
+import { scrapeAndalucia } from "./scrapper";
 import { clearAndCreateDirectory, saveJsonFile } from "./file.helper";
 
 const __filename = fileURLToPath(import.meta.url);

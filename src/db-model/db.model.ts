@@ -3,12 +3,3 @@ export interface EmbalseUpdateSAIH {
   aguaActualSAIH: number;
   fechaMedidaSAIH: string;
 }
-
-export interface EmbalseFullSAIH {
-  nombre: string;
-  cuenca: string;
-  provincia: string;
-  capacidad: number;
-  aguaActualSAIH: number;
-  fechaMedidaSAIH: string;
-}
