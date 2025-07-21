@@ -17,6 +17,7 @@ export async function scrapeCuencaMediterranea(
   // Extract tables organized by province
   const provinceTables = extractProvinceTables($);
 
+
   // Process each province table and flatten the results
   const allReservoirs = provinceTables.flatMap((table) => {
     return reservoirInfoFromTable(table.rows, table.province, $);
